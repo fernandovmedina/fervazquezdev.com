@@ -1,0 +1,68 @@
+---
+const { text = "Featured Work" } = Astro.props;
+---
+
+<astro-divider text={text}>
+  <h2 class="relative text-5xl font-semibold z-10">{text}</h2>
+</astro-divider>
+
+<script type="module">
+  class AstroDivider extends HTMLElement {
+    connectedCallback() {
+      const text = this.getAttribute("text") || "Featured Work";
+      this.innerHTML = `
+        <div class="relative h-[150px] flex items-center justify-center overflow-hidden bg-[#0f0f0f] text-white font-dm">
+          <div class="absolute w-full overflow-hidden marquee-container">
+            <div class="marquee-wrapper flex whitespace-nowrap text-[10vw] font-extrabold opacity-[0.05] select-none uppercase will-change-transform">
+              <div class="marquee flex">
+                ${Array(5).fill(`<span class="mx-8">${text}</span>`).join("")}
+              </div>
+              <div class="marquee flex" aria-hidden="true">
+                ${Array(5).fill(`<span class="mx-8">${text}</span>`).join("")}
+              </div>
+            </div>
+          </div>
+          ${this.innerHTML}
+        </div>
+      `;
+
+      const marquee = this.querySelector(".marquee-wrapper");
+      let lastScroll = window.scrollY;
+      let velocity = 1;
+      let current = 0;
+
+      const loop = () => {
+        current += velocity;
+        marquee.style.transform = `translateX(${-current}px)`;
+        if (current >= marquee.offsetWidth / 2) current = 0;
+        requestAnimationFrame(loop);
+      };
+
+      loop();
+
+      window.addEventListener("scroll", () => {
+        const newScroll = window.scrollY;
+        const delta = newScroll - lastScroll;
+        velocity = Math.min(6, Math.max(0.5, Math.abs(delta))) * 0.5;
+        lastScroll = newScroll;
+      });
+
+      // Friction animation
+      const animate = () => {
+        velocity *= 0.9;
+        if (velocity < 0.3) velocity = 0.3;
+        requestAnimationFrame(animate);
+      };
+
+      animate();
+    }
+  }
+
+  customElements.define("astro-divider", AstroDivider);
+</script>
+
+<style>
+  .marquee-wrapper span {
+    white-space: nowrap;
+  }
+</style>
