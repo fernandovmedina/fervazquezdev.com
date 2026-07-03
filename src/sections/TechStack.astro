@@ -1,18 +1,31 @@
 ---
-import { frameworks, languages, cloudInfra } from "../data/stack";
+import { frameworks, languages, cloudInfra, tools } from "../data/stack";
 import BallButton from "../components/BallButton.astro";
 import { Icon } from "astro-icon/components";
-import SectionDivider from "../components/SectionDivider.astro";
 
-const allTech = [
-  ...languages.map(t => ({ ...t, ring: 1 })),
-  ...cloudInfra.map(t => ({ ...t, ring: 2 })),
-  ...frameworks.map(t => ({ ...t, ring: 3 })),
+const rings = [
+  { data: tools, size: 18 },
+  { data: languages, size: 28 },
+  { data: cloudInfra, size: 38 },
+  { data: frameworks, size: 48 },
 ];
+
+const allTech = rings.flatMap(r => r.data);
+
+const CATEGORY_ORDER = [
+  "My Stack",
+  "Frontend Stack",
+  "Backend Stack",
+  "Mobile Stack",
+  "DevOps Stack",
+  "Daily Tools",
+];
+const present = new Set(allTech.flatMap(t => t.categories));
+const categories = ["All", ...CATEGORY_ORDER.filter(c => present.has(c))];
 ---
 
 <section class="w-full bg-[#0f0f0f] pb-24 md:pb-32" id="tech-orbit">
-  <SectionDivider text="Tech Stack" />
+  
   
   <div class="max-w-7xl mx-auto px-5 md:px-8 pt-16 pb-4 text-center">
     <span class="text-xs font-bold tracking-[0.2em] text-violet-400/70 uppercase" data-reveal="fade">
@@ -26,13 +39,10 @@ const allTech = [
     </p>
   </div>
 
-  <!-- Desktop: orbital animation -->
   <div class="desktop-orbit hidden md:block" id="stack">
     <div class="grid md:grid-cols-5 grid-cols-1 h-full min-h-[700px]">
 
-      <!-- Orbits -->
       <div class="hidden md:flex md:col-span-3 w-full h-full justify-center items-center relative pt-10">
-        <!-- Play/pause controls -->
         <div id="play" class="absolute z-10 hidden">
           <Icon name="play-solid" class="move-btn w-50 h-50 hover:bg-[#1a0933] rounded-full" />
         </div>
@@ -40,65 +50,35 @@ const allTech = [
           <Icon name="pause-solid" class="move-btn w-50 h-50 hover:bg-[#1a0933] rounded-full" />
         </div>
 
-        <!-- Inner ring -->
-        <div class="absolute w-[25rem] h-[25rem] border border-white/[0.06] rounded-full" id="orbit1">
-          {languages.map((tech, i) => (
-            <img
-              src={`https://skillicons.dev/icons?i=${tech.icon}`}
-              alt={tech.icon}
-              class="orbit-icon category-icon"
-              data-categories={tech.categories.join(",")}
-              style={`transform: rotate(${i * (360 / languages.length)}deg) translateY(-12rem) rotate(-${i * (360 / languages.length)}deg);`}
-            />
-          ))}
-        </div>
-
-        <!-- Middle ring -->
-        <div class="absolute w-[35rem] h-[35rem] border border-white/[0.06] rounded-full" id="orbit2">
-          {cloudInfra.map((tech, i) => (
-            <img
-              src={`https://skillicons.dev/icons?i=${tech.icon}`}
-              alt={tech.icon}
-              class="orbit-icon-2 category-icon"
-              data-categories={tech.categories.join(",")}
-              style={`transform: rotate(${i * (360 / cloudInfra.length)}deg) translateY(-18rem) rotate(-${i * (360 / cloudInfra.length)}deg);`}
-            />
-          ))}
-        </div>
-
-        <!-- Outer ring -->
-        <div class="absolute w-[45rem] h-[45rem] border border-white/[0.06] rounded-full" id="orbit3">
-          {frameworks.map((tech, i) => (
-            <img
-              src={`https://skillicons.dev/icons?i=${tech.icon}`}
-              alt={tech.icon}
-              class="orbit-icon-3 category-icon"
-              data-categories={tech.categories.join(",")}
-              style={`transform: rotate(${i * (360 / frameworks.length)}deg) translateY(-23rem) rotate(-${i * (360 / frameworks.length)}deg);`}
-            />
-          ))}
-        </div>
+        {rings.map((ring, r) => (
+          <div
+            class="orbit-ring absolute border border-white/[0.06] rounded-full"
+            data-orbit
+            style={`top:50%;left:50%;width:${ring.size}rem;height:${ring.size}rem;margin-top:-${ring.size / 2}rem;margin-left:-${ring.size / 2}rem;`}
+          >
+            {ring.data.map((tech, i) => (
+              <img
+                src={`https://skillicons.dev/icons?i=${tech.icon}`}
+                alt={tech.icon}
+                class="orbit-icon category-icon"
+                data-categories={tech.categories.join(",")}
+                style={`transform: rotate(${i * (360 / ring.data.length)}deg) translateY(-${ring.size / 2}rem) rotate(-${i * (360 / ring.data.length)}deg);`}
+              />
+            ))}
+          </div>
+        ))}
       </div>
 
-      <!-- Category buttons (desktop) -->
       <div id="btns-stack" class="col-span-2 flex flex-col justify-center items-center h-full gap-2 py-12 px-4">
         <p class="text-xs font-bold tracking-[0.15em] text-gray-500 uppercase mb-4">Filter by category</p>
-        <BallButton title="All" id="All" />
-        <BallButton title="My Main Stack" id="My Main Stack" />
-        <BallButton title="Frontend Stack" id="Frontend Stack" />
-        <BallButton title="Backend Stack" id="Backend Stack" />
-        <BallButton title="DevOps Stack" id="DevOps Stack" />
-        <BallButton title="AI/ML Solutions" id="AI/ML Solutions" />
-        <BallButton title="My OS favorites tools" id="My OS favorites tools" />
+        {categories.map(cat => <BallButton title={cat} id={cat} />)}
       </div>
     </div>
   </div>
 
-  <!-- Mobile: flat grid of icons + filter -->
   <div class="mobile-tech md:hidden px-5 pb-16">
-    <!-- Filter buttons -->
     <div class="mobile-filter-scroll">
-      {["All", "My Main Stack", "Frontend Stack", "Backend Stack", "DevOps Stack", "AI/ML Solutions"].map(cat => (
+      {categories.map(cat => (
         <button
           class="mobile-filter-btn"
           data-cat={cat}
@@ -108,7 +88,6 @@ const allTech = [
       ))}
     </div>
 
-    <!-- Icon grid -->
     <div class="mobile-icon-grid" id="mobile-icon-grid">
       {allTech.map(tech => (
         <div
@@ -129,26 +108,21 @@ const allTech = [
 </section>
 
 <style>
-  /* ─── Desktop orbital icons ──────────────────────── */
-  .orbit-icon,
-  .orbit-icon-2,
-  .orbit-icon-3 {
+  .orbit-icon {
     position: absolute;
+    top: 50%;
+    left: 50%;
     width: 3rem;
     height: 3rem;
+    margin: -1.5rem;
     transform-origin: center;
     transition: filter 0.3s, opacity 0.3s;
     opacity: 0;
   }
 
-  .orbit-icon   { top: 45%; left: 45%; }
-  .orbit-icon-2 { top: 47%; left: 47%; }
-  .orbit-icon-3 { top: 47%; left: 47%; }
-
   .highlighted { opacity: 1 !important; }
   .dimmed      { opacity: 0.1 !important; }
 
-  /* ─── Mobile filter ──────────────────────────────── */
   .mobile-filter-scroll {
     display: flex;
     gap: 0.5rem;
@@ -181,7 +155,6 @@ const allTech = [
     background: rgba(168,85,247,0.08);
   }
 
-  /* ─── Mobile icon grid ───────────────────────────── */
   .mobile-icon-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(3.5rem, 1fr));
@@ -220,16 +193,13 @@ const allTech = [
   import ScrollTrigger from "gsap/ScrollTrigger";
   gsap.registerPlugin(ScrollTrigger);
 
-  let orbit1Tween: gsap.core.Tween;
-  let orbit2Tween: gsap.core.Tween;
-  let orbit3Tween: gsap.core.Tween;
-  let isPlaying = true;
+  let orbitTweens: gsap.core.Tween[] = [];
 
   document.addEventListener("DOMContentLoaded", () => {
-    // ── Desktop orbital setup ─────────────────────────────────────────
     const desktopOrbit = document.getElementById("stack");
     if (desktopOrbit) {
-      // Entrance animation (play once, no scrub so orbits stay visible)
+      const rings = gsap.utils.toArray<HTMLElement>("[data-orbit]");
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: "#stack",
@@ -238,18 +208,19 @@ const allTech = [
         },
       });
 
-      tl.from("#orbit1", { y: 60, opacity: 0, duration: 0.7, ease: "power3.out" })
-        .from("#orbit2", { y: 80, opacity: 0, duration: 0.7, ease: "power3.out" }, "-=0.5")
-        .from("#orbit3", { y: 100, opacity: 0, duration: 0.7, ease: "power3.out" }, "-=0.5")
+      tl.from(rings, { y: 80, opacity: 0, duration: 0.7, stagger: 0.15, ease: "power3.out" })
         .from("#pause",  { opacity: 0, scale: 0.8, duration: 0.4, ease: "back.out(1.5)" }, "-=0.3")
         .from("#btns-stack", { x: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, "-=0.6");
 
-      // Start orbiting
-      orbit1Tween = gsap.to("#orbit1", { rotate: 360,  duration: 50, repeat: -1, ease: "none" });
-      orbit2Tween = gsap.to("#orbit2", { rotate: -360, duration: 75, repeat: -1, ease: "none" });
-      orbit3Tween = gsap.to("#orbit3", { rotate: 360,  duration: 100, repeat: -1, ease: "none" });
+      orbitTweens = rings.map((ring, i) =>
+        gsap.to(ring, {
+          rotate: i % 2 === 0 ? 360 : -360,
+          duration: 50 + i * 20,
+          repeat: -1,
+          ease: "none",
+        })
+      );
 
-      // Category filter
       const icons = document.querySelectorAll(".category-icon");
       const buttons = document.querySelectorAll<HTMLElement>(".ball-button, .category-button");
 
@@ -274,33 +245,24 @@ const allTech = [
         });
       });
 
-      // Default: show all
       filterCategory("All");
 
-      // Play/pause
       const playBtn  = document.getElementById("play")!;
       const pauseBtn = document.getElementById("pause")!;
 
       pauseBtn.addEventListener("click", () => {
-        orbit1Tween.pause();
-        orbit2Tween.pause();
-        orbit3Tween.pause();
-        isPlaying = false;
+        orbitTweens.forEach(t => t.pause());
         pauseBtn.classList.add("hidden");
         playBtn.classList.remove("hidden");
       });
 
       playBtn.addEventListener("click", () => {
-        orbit1Tween.resume();
-        orbit2Tween.resume();
-        orbit3Tween.resume();
-        isPlaying = true;
+        orbitTweens.forEach(t => t.resume());
         playBtn.classList.add("hidden");
         pauseBtn.classList.remove("hidden");
       });
     }
 
-    // ── Mobile icon grid filter ───────────────────────────────────────
     const mobileFilterBtns = document.querySelectorAll<HTMLElement>(".mobile-filter-btn");
     const mobileItems      = document.querySelectorAll<HTMLElement>(".mobile-icon-item");
 
@@ -322,7 +284,6 @@ const allTech = [
       btn.addEventListener("click", () => filterMobile(btn.dataset.cat ?? "All"));
     });
 
-    // Default
     filterMobile("All");
   });
 </script>
