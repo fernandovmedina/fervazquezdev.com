@@ -20,14 +20,16 @@ const CATEGORY_ORDER = [
   "DevOps Stack",
   "Daily Tools",
 ];
+
 const present = new Set(allTech.flatMap(t => t.categories));
+
 const categories = ["All", ...CATEGORY_ORDER.filter(c => present.has(c))];
 ---
 
-<section class="w-full bg-[#0f0f0f] pb-24 md:pb-32" id="tech-orbit">
+<section class="w-full pb-24 md:pb-32" id="tech-orbit">
   
   
-  <div class="max-w-7xl mx-auto px-5 md:px-8 pt-16 pb-4 text-center">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 pt-16 pb-10 text-center">
     <span class="text-xs font-bold tracking-[0.2em] text-violet-400/70 uppercase" data-reveal="fade">
       — Tools & Technologies —
     </span>
