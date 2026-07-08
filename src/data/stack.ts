@@ -1,8 +1,6 @@
 export const cloudInfra = [
   { icon: "docker", categories: ["My Stack", "DevOps Stack"] },
   { icon: "linux", categories: ["My Stack", "DevOps Stack"] },
-  { icon: "git", categories: ["My Stack", "DevOps Stack"] },
-  { icon: "github", categories: ["My Stack", "DevOps Stack"] },
   { icon: "vercel", categories: ["DevOps Stack"] },
   { icon: "nginx", categories: ["DevOps Stack"] },
   { icon: "redis", categories: ["Backend Stack"] },
@@ -49,10 +47,6 @@ export const languages = [
     categories: ["Mobile Stack"],
   },
   {
-    icon: "sql",
-    categories: ["My Stack", "Backend Stack"],
-  },
-  {
     icon: "html",
     categories: ["Frontend Stack"],
   },
@@ -68,10 +62,7 @@ export const languages = [
 
 export const tools = [
   { icon: "vscode", categories: ["Daily Tools"] },
-  { icon: "claude", categories: ["Daily Tools"] },
-  { icon: "chatgpt", categories: ["Daily Tools"] },
-  { icon: "canva", categories: ["Daily Tools"] },
-  { icon: "github", categories: ["Daily Tools"] },
-  { icon: "git", categories: ["Daily Tools"] },
-  { icon: "postman", categories: ["Backend Stack"] },
+  { icon: "github", categories: ["Daily Tools", "My Stack", "DevOps Stack"] },
+  { icon: "git", categories: ["Daily Tools", "My Stack", "DevOps Stack"] },
+  { icon: "postman", categories: ["Daily Tools", "Backend Stack"] },
 ];
