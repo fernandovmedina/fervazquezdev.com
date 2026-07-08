@@ -1,46 +1,31 @@
 ---
-// Custom cursor: a small dot + a trailing ring that grows over interactive elements.
-// Only enabled on fine-pointer devices; the native cursor stays visible underneath.
+// Custom cursor: the Tux logo (public/icon.png) trailing the pointer, growing over
+// interactive elements. Only enabled on fine-pointer devices; the native cursor
+// stays visible underneath.
 ---
 
-<div id="cursor-dot" aria-hidden="true"></div>
-<div id="cursor-ring" aria-hidden="true"></div>
+<img id="cursor-tux" src="/icon.png" alt="" aria-hidden="true" />
 
 <style>
-	#cursor-dot,
-	#cursor-ring {
+	#cursor-tux {
 		position: fixed;
 		top: 0;
 		left: 0;
 		pointer-events: none;
-		border-radius: 999px;
 		z-index: 9999;
 		opacity: 0;
+		width: 28px;
+		height: 28px;
+		margin: -14px;
+		transition: scale 0.25s ease;
 	}
 
-	#cursor-dot {
-		width: 8px;
-		height: 8px;
-		margin: -4px;
-		background: #a855f7;
-	}
-
-	#cursor-ring {
-		width: 36px;
-		height: 36px;
-		margin: -18px;
-		border: 1.5px solid rgba(168, 85, 247, 0.5);
-		transition: transform 0.25s ease, border-color 0.25s ease;
-	}
-
-	#cursor-ring.grow {
-		transform: scale(1.8);
-		border-color: rgba(168, 85, 247, 0.9);
+	#cursor-tux.grow {
+		scale: 1.5;
 	}
 
 	@media (hover: none), (pointer: coarse) {
-		#cursor-dot,
-		#cursor-ring {
+		#cursor-tux {
 			display: none;
 		}
 	}
@@ -54,34 +39,29 @@
 		const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 		if (!fine || reduced) return;
 
-		const dot = document.getElementById("cursor-dot")!;
-		const ring = document.getElementById("cursor-ring")!;
+		const tux = document.getElementById("cursor-tux")!;
 
-		const dotX = gsap.quickTo(dot, "x", { duration: 0.12, ease: "power3.out" });
-		const dotY = gsap.quickTo(dot, "y", { duration: 0.12, ease: "power3.out" });
-		const ringX = gsap.quickTo(ring, "x", { duration: 0.4, ease: "power3.out" });
-		const ringY = gsap.quickTo(ring, "y", { duration: 0.4, ease: "power3.out" });
+		const tuxX = gsap.quickTo(tux, "x", { duration: 0.12, ease: "power3.out" });
+		const tuxY = gsap.quickTo(tux, "y", { duration: 0.12, ease: "power3.out" });
 
 		let visible = false;
 		window.addEventListener("pointermove", (e) => {
 			if (!visible) {
 				visible = true;
-				gsap.to([dot, ring], { opacity: 1, duration: 0.3 });
+				gsap.to(tux, { opacity: 1, duration: 0.3 });
 			}
-			dotX(e.clientX);
-			dotY(e.clientY);
-			ringX(e.clientX);
-			ringY(e.clientY);
+			tuxX(e.clientX);
+			tuxY(e.clientY);
 
 			const target = (e.target as HTMLElement).closest(
 				"a, button, [data-cursor-grow]"
 			);
-			ring.classList.toggle("grow", !!target);
+			tux.classList.toggle("grow", !!target);
 		});
 
 		document.documentElement.addEventListener("mouseleave", () => {
 			visible = false;
-			gsap.to([dot, ring], { opacity: 0, duration: 0.3 });
+			gsap.to(tux, { opacity: 0, duration: 0.3 });
 		});
 	});
 </script>
