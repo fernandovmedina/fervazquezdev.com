@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#12061f"/>
+      <stop offset="1" stop-color="#0f0f0f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.75" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#a855f7" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#a855f7" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.04"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#grid)"/>
+  <rect width="800" height="500" fill="url(#glow)"/>
+  <text x="530" y="230" fill="#a855f7" font-size="130" font-weight="800" font-family="ui-monospace, monospace" fill-opacity="0.9">{ }</text>
+  <g font-family="ui-monospace, monospace" font-size="17" fill="#ffffff" fill-opacity="0.35">
+    <text x="500" y="280">def solve(n):</text>
+    <text x="500" y="305">&#160;&#160;return dp[n]</text>
+  </g>
+</svg>

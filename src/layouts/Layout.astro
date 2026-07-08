@@ -1,18 +1,65 @@
 ---
 import '../styles/global.css';
+import Cursor from '../components/Cursor.astro';
+import { site } from '../data/site';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Fernando Vazquez - Software Engineer</title>
+		<title>Fernando Vazquez — Fullstack Developer</title>
+		<meta name="description" content={site.description} />
+		<meta name="author" content={site.name} />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Fernando Vazquez — Fullstack Developer" />
+		<meta property="og:description" content={site.description} />
+		<meta property="og:url" content="https://fernandovazquez.dev" />
+		<meta name="twitter:card" content="summary" />
+		<meta name="theme-color" content="#0f0f0f" />
 	</head>
 	<body>
+		<Cursor />
 		<slot />
+
+		<script>
+			import gsap from "gsap";
+			import ScrollTrigger from "gsap/ScrollTrigger";
+			gsap.registerPlugin(ScrollTrigger);
+
+			document.addEventListener("DOMContentLoaded", () => {
+				const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+				const els = gsap.utils.toArray<HTMLElement>("[data-reveal]");
+				if (reduced) return;
+
+				const vectors: Record<string, { x?: number; y?: number }> = {
+					up: { y: 40 },
+					down: { y: -40 },
+					left: { x: 40 },
+					right: { x: -40 },
+					fade: {},
+				};
+
+				els.forEach((el) => {
+					const type = el.dataset.reveal || "up";
+					const delay = parseFloat(el.dataset.revealDelay || "0");
+					gsap.from(el, {
+						opacity: 0,
+						...vectors[type],
+						duration: 0.8,
+						delay,
+						ease: "power3.out",
+						scrollTrigger: {
+							trigger: el,
+							start: "top 88%",
+							toggleActions: "play none none none",
+						},
+					});
+				});
+			});
+		</script>
 	</body>
 </html>

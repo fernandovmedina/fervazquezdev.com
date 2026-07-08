@@ -1,10 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../sections/Hero.astro';
+import About from '../sections/About.astro';
+import Experience from '../sections/Experience.astro';
 import TechStack from '../sections/TechStack.astro';
+import Projects from '../sections/Projects.astro';
+import Achievements from '../sections/Achievements.astro';
+import Contact from '../sections/Contact.astro';
+import Footer from '../sections/Footer.astro';
 ---
 
 <Layout>
-	<main class="bg-[#0f0f0f] px-10">
+	<Navbar />
+	<main class="bg-[#0f0f0f]">
+		<Hero />
+		<About />
+		<Experience />
 		<TechStack />
+		<Projects />
+		<Achievements />
+		<Contact />
 	</main>
+	<Footer />
 </Layout>

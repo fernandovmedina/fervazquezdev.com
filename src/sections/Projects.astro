@@ -1,0 +1,288 @@
+---
+import SectionHeading from "../components/SectionHeading.astro";
+import { Icon } from "astro-icon/components";
+import { projects } from "../data/projects";
+---
+
+<section id="projects" class="w-full pb-24 md:pb-32 overflow-hidden">
+	<SectionHeading
+		eyebrow="Selected Work"
+		title="Projects"
+		subtitle="Drag, click or swipe through the stack — every card is a real product I've built."
+	/>
+
+	<div class="max-w-5xl mx-auto px-5 md:px-8" data-reveal="up">
+		<!-- Stage -->
+		<div
+			id="card-stage"
+			class="relative w-full outline-none"
+			tabindex="0"
+			aria-roledescription="carousel"
+			aria-label="Projects"
+		>
+			<!-- background wash / spotlight -->
+			<div class="pointer-events-none absolute inset-x-0 top-6 mx-auto h-48 w-[70%] rounded-full bg-white/5 blur-3xl" aria-hidden="true"></div>
+			<div class="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-40 w-[76%] rounded-full bg-violet-500/10 blur-3xl" aria-hidden="true"></div>
+
+			<div id="card-plane" class="absolute inset-0 flex items-end justify-center">
+				{projects.map((project, i) => (
+					<article
+						class="stack-card absolute bottom-0 rounded-2xl border-4 border-white/10 overflow-hidden shadow-xl will-change-transform select-none"
+						data-index={i}
+					>
+						<img
+							src={project.image}
+							alt={project.title}
+							class="absolute inset-0 h-full w-full object-cover"
+							draggable="false"
+							loading={i === 0 ? "eager" : "lazy"}
+						/>
+						<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+						<div class="relative z-10 flex h-full flex-col justify-end p-5">
+							<span class="text-[10px] font-bold uppercase tracking-widest text-violet-300 mb-1">
+								{project.tag}
+							</span>
+							<h3 class="truncate text-lg font-display font-semibold text-white">
+								{project.title}
+							</h3>
+							<p class="mt-1 line-clamp-2 text-sm text-white/80">{project.description}</p>
+						</div>
+					</article>
+				))}
+			</div>
+		</div>
+
+		<!-- Dots -->
+		<div class="mt-6 flex items-center justify-center gap-3">
+			<div id="card-dots" class="flex items-center gap-2">
+				{projects.map((project, i) => (
+					<button
+						data-dot={i}
+						class="h-2 w-2 rounded-full bg-white/30 hover:bg-white/50 transition"
+						aria-label={`Go to ${project.title}`}
+					></button>
+				))}
+			</div>
+		</div>
+
+		<!-- Active project details -->
+		<div id="card-info" class="mt-10 max-w-2xl mx-auto text-center transition-opacity duration-300">
+			<h3 id="card-info-title" class="text-2xl font-display font-semibold text-white"></h3>
+			<p id="card-info-desc" class="text-gray-400 mt-3 leading-relaxed text-sm md:text-base"></p>
+			<div id="card-info-tech" class="mt-4 flex flex-wrap justify-center gap-2"></div>
+			<a
+				id="card-info-link"
+				href="#"
+				target="_blank"
+				rel="noreferrer"
+				class="hidden mt-5 inline-flex items-center gap-2 text-sm font-semibold text-violet-300 hover:text-violet-200 transition-colors"
+			>
+				View on GitHub
+				<Icon name="arrow-up-right-solid" class="w-3.5 h-3.5" />
+			</a>
+		</div>
+	</div>
+</section>
+
+<script>
+	// Vanilla port of 21st.dev "card-stack" (fan carousel): same signed-offset fan
+	// geometry, click-to-focus, drag/swipe, dots, keyboard nav and auto-advance,
+	// animated with GSAP instead of framer-motion.
+	import gsap from "gsap";
+	import { projects } from "../data/projects";
+
+	document.addEventListener("DOMContentLoaded", () => {
+		const stage = document.getElementById("card-stage");
+		if (!stage) return;
+
+		const plane = document.getElementById("card-plane")!;
+		const cards = Array.from(stage.querySelectorAll<HTMLElement>(".stack-card"));
+		const dots = Array.from(document.querySelectorAll<HTMLElement>("[data-dot]"));
+		const info = {
+			box: document.getElementById("card-info")!,
+			title: document.getElementById("card-info-title")!,
+			desc: document.getElementById("card-info-desc")!,
+			tech: document.getElementById("card-info-tech")!,
+			link: document.getElementById("card-info-link") as HTMLAnchorElement,
+		};
+
+		const len = cards.length;
+		const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+		// Fan geometry constants (from the original component defaults)
+		const MAX_OFFSET = 2; // maxVisible 5
+		const SPREAD_DEG = 30;
+		const STEP_DEG = SPREAD_DEG / MAX_OFFSET;
+		const OVERLAP = 0.48;
+		const DEPTH_PX = 140;
+		const TILT_X = 12;
+		const ACTIVE_LIFT = 22;
+		const ACTIVE_SCALE = 1.03;
+		const INACTIVE_SCALE = 0.94;
+
+		let active = 0;
+		let cardW = 520;
+		let cardH = 320;
+
+		const wrap = (n: number) => ((n % len) + len) % len;
+
+		function signedOffset(i: number) {
+			const raw = i - active;
+			const alt = raw > 0 ? raw - len : raw + len;
+			return Math.abs(alt) < Math.abs(raw) ? alt : raw;
+		}
+
+		function measure() {
+			const w = stage!.clientWidth;
+			cardW = Math.round(Math.min(520, Math.max(240, w * 0.55)));
+			cardH = Math.round(cardW * 0.615);
+			stage!.style.height = `${Math.max(300, cardH + 80)}px`;
+			plane.style.perspective = "1100px";
+			cards.forEach((card) => {
+				card.style.width = `${cardW}px`;
+				card.style.height = `${cardH}px`;
+			});
+		}
+
+		function layout(animate = true) {
+			const spacing = Math.max(10, Math.round(cardW * (1 - OVERLAP)));
+			cards.forEach((card, i) => {
+				const off = signedOffset(i);
+				const abs = Math.abs(off);
+				const visible = abs <= MAX_OFFSET;
+				const isActive = off === 0;
+
+				card.style.zIndex = String(100 - abs);
+				card.style.cursor = isActive ? "grab" : "pointer";
+
+				gsap.to(card, {
+					x: off * spacing,
+					y: abs * 10 + (isActive ? -ACTIVE_LIFT : 0),
+					z: -abs * DEPTH_PX,
+					rotationZ: off * STEP_DEG,
+					rotationX: isActive ? 0 : TILT_X,
+					scale: isActive ? ACTIVE_SCALE : INACTIVE_SCALE,
+					autoAlpha: visible ? 1 : 0,
+					duration: animate && !reduced ? 0.65 : 0,
+					ease: "power3.out",
+					overwrite: "auto",
+				});
+			});
+
+			dots.forEach((dot, i) => {
+				dot.classList.toggle("bg-white", i === active);
+				dot.classList.toggle("bg-white/30", i !== active);
+			});
+
+			updateInfo();
+		}
+
+		function updateInfo() {
+			const project = projects[active];
+			info.box.style.opacity = "0";
+			setTimeout(() => {
+				info.title.textContent = project.title;
+				info.desc.textContent = project.longDescription;
+				info.tech.innerHTML = project.tech
+					.map(
+						(t) =>
+							`<span class="text-xs font-medium text-gray-400 border border-white/10 bg-white/[0.03] rounded-full px-3 py-1">${t}</span>`
+					)
+					.join("");
+				if (project.href) {
+					info.link.href = project.href;
+					info.link.classList.remove("hidden");
+				} else {
+					info.link.classList.add("hidden");
+				}
+				info.box.style.opacity = "1";
+			}, 180);
+		}
+
+		function goTo(i: number) {
+			active = wrap(i);
+			layout();
+		}
+		const next = () => goTo(active + 1);
+		const prev = () => goTo(active - 1);
+
+		// Click a card to focus it
+		cards.forEach((card) => {
+			card.addEventListener("click", () => {
+				const i = Number(card.dataset.index);
+				if (i !== active) goTo(i);
+			});
+		});
+
+		// Dots
+		dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+
+		// Keyboard
+		stage.addEventListener("keydown", (e) => {
+			if (e.key === "ArrowLeft") prev();
+			if (e.key === "ArrowRight") next();
+		});
+
+		// Drag / swipe on the active card
+		let dragging = false;
+		let startX = 0;
+		let startT = 0;
+
+		stage.addEventListener("pointerdown", (e) => {
+			const card = (e.target as HTMLElement).closest(".stack-card") as HTMLElement | null;
+			if (!card || Number(card.dataset.index) !== active) return;
+			dragging = true;
+			startX = e.clientX;
+			startT = performance.now();
+			card.style.cursor = "grabbing";
+			card.setPointerCapture(e.pointerId);
+		});
+
+		stage.addEventListener("pointermove", (e) => {
+			if (!dragging) return;
+			const dx = e.clientX - startX;
+			gsap.set(cards[active], { x: `+=${dx * 0.15}` });
+		});
+
+		stage.addEventListener("pointerup", (e) => {
+			if (!dragging) return;
+			dragging = false;
+			const dx = e.clientX - startX;
+			const velocity = (dx / Math.max(1, performance.now() - startT)) * 1000;
+			const threshold = Math.min(160, cardW * 0.22);
+
+			if (dx > threshold || velocity > 650) prev();
+			else if (dx < -threshold || velocity < -650) next();
+			else layout();
+		});
+
+		stage.addEventListener("pointercancel", () => {
+			if (!dragging) return;
+			dragging = false;
+			layout();
+		});
+
+		// Auto-advance, paused on hover
+		let hovering = false;
+		stage.addEventListener("mouseenter", () => (hovering = true));
+		stage.addEventListener("mouseleave", () => (hovering = false));
+
+		if (!reduced) {
+			setInterval(() => {
+				if (!hovering && !dragging) next();
+			}, 3500);
+		}
+
+		measure();
+		layout(false);
+
+		let resizeT: ReturnType<typeof setTimeout>;
+		window.addEventListener("resize", () => {
+			clearTimeout(resizeT);
+			resizeT = setTimeout(() => {
+				measure();
+				layout(false);
+			}, 150);
+		});
+	});
+</script>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171004"/>
+      <stop offset="1" stop-color="#0f0f0f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.75" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.04"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#grid)"/>
+  <rect width="800" height="500" fill="url(#glow)"/>
+  <g stroke="#f59e0b" fill="none" stroke-width="3" stroke-linecap="round">
+    <path d="M520 230 A 90 90 0 1 1 700 230" stroke-opacity="0.6"/>
+    <path d="M545 230 A 65 65 0 1 1 675 230" stroke-opacity="0.25"/>
+    <line x1="610" y1="230" x2="662" y2="172" stroke-width="5"/>
+  </g>
+  <circle cx="610" cy="230" r="10" fill="#f59e0b"/>
+  <g fill="#f59e0b" font-size="13" font-weight="700">
+    <text x="505" y="150" fill-opacity="0.7">BUY</text>
+    <text x="672" y="150" fill-opacity="0.7">PASS</text>
+  </g>
+</svg>

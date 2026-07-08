@@ -1,0 +1,55 @@
+---
+import SectionHeading from "../components/SectionHeading.astro";
+
+const stats = [
+	{ value: "5+", label: "Years writing code" },
+	{ value: "15+", label: "Products shipped" },
+	{ value: "200+", label: "Day-one users on my last launch" },
+	{ value: "3", label: "Clouds I deploy to — AWS, GCP, DO" },
+];
+---
+
+<section id="about" class="w-full pb-24 md:pb-32">
+	<SectionHeading
+		eyebrow="Who I Am"
+		title="About Me"
+		subtitle="Backend at heart, fullstack in practice."
+	/>
+
+	<div class="max-w-6xl mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+		<div class="space-y-5 text-gray-300 leading-relaxed" data-reveal="right">
+			<p>
+				I'm a software developer from <span class="text-white font-semibold">Saltillo, Mexico</span>, coding for
+				over five years. I started with HTML and CSS, moved through JavaScript and React, and today I build
+				frontends with <span class="text-violet-300">Next.js</span> and <span class="text-violet-300">Astro</span> —
+				but where I'm most at home is the backend.
+			</p>
+			<p>
+				My main language is <span class="text-violet-300">Go</span>. I've built microservices, load balancers,
+				monolith APIs, FTP servers and video streaming pipelines for Netflix-scale clones. Auth, JWT, CORS,
+				middlewares, idempotency — the plumbing that makes products reliable is the part I enjoy the most.
+			</p>
+			<p>
+				I'm fluent in <span class="text-violet-300">Linux</span> (three years on Fedora riced with Hyprland,
+				Kitty and Neovim before switching to a MacBook), and I set up servers from scratch on AWS, GCP and
+				DigitalOcean with NGINX and Docker. My favorite database is <span class="text-violet-300">PostgreSQL</span> with Supabase, though I enjoy wiring a raw database URI
+				and building a backend from zero.
+			</p>
+			<p>
+				Beyond client work, I run my own software studio — <span class="text-white font-semibold">OLMEWARE</span> —
+				building ERPs, traceability systems and management platforms for real companies in northern Mexico.
+			</p>
+		</div>
+
+		<div class="grid grid-cols-2 gap-4" data-reveal="left">
+			{stats.map((stat) => (
+				<div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 hover:border-violet-400/40 transition-colors">
+					<p class="text-4xl md:text-5xl font-display font-bold text-white">
+						{stat.value}
+					</p>
+					<p class="text-sm text-gray-400 mt-2">{stat.label}</p>
+				</div>
+			))}
+		</div>
+	</div>
+</section>

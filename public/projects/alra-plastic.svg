@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#03150f"/>
+      <stop offset="1" stop-color="#0f0f0f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.75" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#10b981" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.04"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#grid)"/>
+  <rect width="800" height="500" fill="url(#glow)"/>
+  <g stroke="#10b981" fill="none" stroke-width="7" stroke-linecap="round">
+    <path d="M610 105 A 80 80 0 0 1 683 155"/>
+    <path d="M700 205 A 80 80 0 0 1 655 258"/>
+    <path d="M560 250 A 80 80 0 0 1 538 180"/>
+  </g>
+  <g fill="#10b981">
+    <path d="M683 140 L697 162 L671 166 Z"/>
+    <path d="M662 270 L636 262 L654 242 Z"/>
+    <path d="M532 165 L552 148 L558 174 Z"/>
+  </g>
+</svg>

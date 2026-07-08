@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b0410"/>
+      <stop offset="1" stop-color="#0f0f0f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.75" cy="0.35" r="0.6">
+      <stop offset="0" stop-color="#f43f5e" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#f43f5e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.04"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#grid)"/>
+  <rect width="800" height="500" fill="url(#glow)"/>
+  <path d="M610 250 C560 210 545 160 585 130 C615 108 645 125 610 165 C575 125 605 108 635 130 C675 160 660 210 610 250Z"
+    fill="#f43f5e" fill-opacity="0.9" transform="rotate(-8 610 180)"/>
+  <path d="M610 250 C560 210 545 160 585 130 C615 108 645 125 610 165 C575 125 605 108 635 130 C675 160 660 210 610 250Z"
+    fill="none" stroke="#f43f5e" stroke-opacity="0.4" stroke-width="2" transform="rotate(-8 610 180) scale(1.25) translate(-122 -36)"/>
+</svg>
