@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+@theme {
+  --font-dm: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-surface: #0f0f0f;
+  --color-accent: #a855f7;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0f0f0f;
+  color: #f5f5f5;
+  font-family: var(--font-dm);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(168, 85, 247, 0.4);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0f0f0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2e;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a855f7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Custom cursor (Cursor.tsx) */
+#cursor-tux {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  width: 28px;
+  height: 28px;
+  margin: -14px;
+  transition: scale 0.25s ease;
+}
+
+#cursor-tux.grow {
+  scale: 1.5;
+}
+
+@media (hover: none), (pointer: coarse) {
+  #cursor-tux {
+    display: none;
+  }
+}
+
+/* Liquid glass button (LiquidButton.tsx) */
+.liquid-glass {
+  backdrop-filter: blur(4px);
+}
+
+@supports (backdrop-filter: url("#liquid-glass-filter")) {
+  .liquid-glass {
+    backdrop-filter: url("#liquid-glass-filter");
+  }
+}
+
+/* Tech stack orbit (TechStack.tsx) */
+.orbit-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3rem;
+  height: 3rem;
+  margin: -1.5rem;
+  transform-origin: center;
+  transition: filter 0.3s, opacity 0.3s;
+  opacity: 0;
+}
+
+.highlighted { opacity: 1 !important; }
+.dimmed      { opacity: 0.1 !important; }
+
+.mobile-filter-scroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  scrollbar-width: none;
+}
+
+.mobile-filter-scroll::-webkit-scrollbar { display: none; }
+
+.mobile-filter-btn {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  cursor: none;
+}
+
+.mobile-filter-btn:hover,
+.mobile-filter-btn.active {
+  border-color: #a855f7;
+  color: #a855f7;
+  background: rgba(168,85,247,0.08);
+}
+
+.mobile-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(3.5rem, 1fr));
+  gap: 0.75rem;
+}
+
+.mobile-icon-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.03);
+  transition: opacity 0.3s, border-color 0.3s;
+}
+
+.mobile-icon-item.mobile-hidden {
+  opacity: 0.08;
+}
+
+.mobile-icon-item.mobile-active {
+  border-color: rgba(168,85,247,0.3);
+  background: rgba(168,85,247,0.06);
+}
+
+.mobile-icon-img {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}

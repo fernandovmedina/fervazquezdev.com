@@ -1,16 +1,16 @@
 # fernandovazquez.dev
 
-Personal portfolio built with [Astro](https://astro.build), styled with
+Personal portfolio built with [Next.js](https://nextjs.org) (App Router), styled with
 [Tailwind CSS](https://tailwindcss.com) and animated with
 [GSAP](https://gsap.com). Features an interactive orbital tech stack section
 that lets visitors filter technologies by category.
 
 ## Tech Stack
 
-- **[Astro](https://astro.build)** — static site framework
+- **[Next.js](https://nextjs.org)** — React framework (statically prerendered)
 - **[Tailwind CSS](https://tailwindcss.com)** — styling
 - **[GSAP](https://gsap.com)** — scroll-triggered and orbital animations
-- **[astro-icon](https://github.com/natemoo-re/astro-icon)** — SVG icons
+- **[three.js](https://threejs.org)** — generative contact scene
 - **TypeScript**
 
 ## Requirements
@@ -22,22 +22,22 @@ that lets visitors filter technologies by category.
 
 ```bash
 pnpm install     # install dependencies
-pnpm dev         # start the dev server at http://localhost:4321
-pnpm build       # build for production into ./dist
-pnpm preview     # preview the production build locally
+pnpm dev         # start the dev server at http://localhost:3000
+pnpm build       # build for production into ./.next
+pnpm start       # serve the production build locally
+pnpm typecheck   # run the TypeScript compiler
 ```
 
 ## Project Structure
 
 ```
 src/
-├── components/   # Reusable UI components (e.g. BallButton)
+├── app/          # App Router: layout.tsx, page.tsx, globals.css
+├── components/   # Reusable UI components (e.g. BallButton, Icon)
 ├── data/         # Data sources (stack.ts — tech stack items & categories)
-├── icons/        # SVG icons used via astro-icon
-├── layouts/      # Page layouts
-├── pages/        # Routes (index.astro)
-├── sections/     # Page sections (TechStack.astro)
-└── styles/       # Global styles
+├── icons/        # Inline SVG icon bodies rendered by components/Icon.tsx
+├── lib/          # Small helpers
+└── sections/     # Page sections (TechStack.tsx)
 ```
 
 ### Tech stack section
