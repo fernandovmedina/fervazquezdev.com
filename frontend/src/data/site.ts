@@ -1,3 +1,5 @@
+import type { IconName } from "@/icons";
+
 export const site = {
   name: "Fernando Vazquez",
   role: "Fullstack Developer",
@@ -11,7 +13,7 @@ export const site = {
     "Fernando Vazquez — backend-focused fullstack developer from Saltillo, Mexico. Go, TypeScript, Next.js, Astro, PostgreSQL, Docker and cloud infrastructure.",
 };
 
-export const socials = [
+export const socials: { name: string; icon: IconName; href: string }[] = [
   { name: "GitHub", icon: "github-brands", href: site.github },
   { name: "LinkedIn", icon: "linkedin-brands", href: site.linkedin },
   { name: "Instagram", icon: "instagram-brands", href: site.instagram },

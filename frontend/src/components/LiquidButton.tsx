@@ -1,0 +1,32 @@
+// Port of 21st.dev "liquid-glass-button" (@aliimam): same glass shadows and
+// SVG displacement filter, rendered as a plain anchor.
+import { cn } from "@/lib/cn";
+
+export default function LiquidButton({
+  href = "#",
+  className = "",
+  download = false,
+  children,
+}: {
+  href?: string;
+  className?: string;
+  download?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      download={download || undefined}
+      className={cn(
+        "liquid-btn relative inline-flex items-center justify-center gap-2 whitespace-nowrap",
+        "h-12 px-8 rounded-full text-sm font-medium text-white border border-white/30",
+        "cursor-pointer transition duration-300 hover:scale-105",
+        className,
+      )}
+    >
+      <div className="absolute top-0 left-0 z-0 h-full w-full rounded-full shadow-[0_0_8px_rgba(0,0,0,0.03),0_2px_6px_rgba(0,0,0,0.08),inset_3px_3px_0.5px_-3.5px_rgba(255,255,255,0.09),inset_-3px_-3px_0.5px_-3.5px_rgba(255,255,255,0.85),inset_1px_1px_1px_-0.5px_rgba(255,255,255,0.6),inset_-1px_-1px_1px_-0.5px_rgba(255,255,255,0.6),inset_0_0_6px_6px_rgba(255,255,255,0.12),inset_0_0_2px_2px_rgba(255,255,255,0.06),0_0_12px_rgba(0,0,0,0.15)]" />
+      <div className="liquid-glass absolute top-0 left-0 isolate -z-10 h-full w-full overflow-hidden rounded-full" />
+      <span className="pointer-events-none z-10 flex items-center gap-2">{children}</span>
+    </a>
+  );
+}
